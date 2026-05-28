@@ -1,15 +1,31 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: hello-pac-run-
+  generateName: pac-direct-name-pr-
   annotations:
     pipelinesascode.tekton.dev/on-event: "[push]"
     pipelinesascode.tekton.dev/on-target-branch: "[master, main]"
 spec:
+  pipelineRef:
+    name: pac-ref-type-pipeline
   params:
     - name: trigger-type
-      value: push
+      value: "push-direct-name"
     - name: message
-      value: "hello from pipelines as code"
-  pipelineRef:
-    name: hello-demo-pipeline
+      value: "push triggered direct pipelineRef name run"
+    - name: source-repo
+      value: "{{ repo_url }}"
+    - name: source-branch
+      value: "{{ source_branch }}"
+    - name: target-branch
+      value: "{{ target_branch }}"
+    - name: revision
+      value: "{{ revision }}"
+    - name: pr-number
+      value: "{{ pull_request_number }}"
+  taskRunTemplate:
+    serviceAccountName: default
+    podTemplate:
+      securityContext:
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
