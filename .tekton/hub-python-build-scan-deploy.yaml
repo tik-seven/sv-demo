@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: sv-hub-python-build-scan-deploy-
+  annotations:
+    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/on-target-branch: "[main]"
+spec:
+  pipelineRef:
+    resolver: hub
+    params:
+      - name: catalog
+        value: catalog
+      - name: kind
+        value: pipeline
+      - name: name
+        value: python-image-build-scan-deploy
+      - name: version
+        value: "0.2"
+  params:
+    - name: gitURL
+      value: "{{ repo_url }}"
+    - name: gitRevision
+      value: "{{ revision }}"
+    - name: images
+      value:
+        - "registry.example.com/pac-demo/sv-demo:{{ revision }}"
+    - name: tlsVerify
+      value: "false"
+  workspaces:
+    - name: source
+      emptyDir: {}
+  taskRunTemplate:
+    serviceAccountName: default
+    podTemplate:
+      securityContext:
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
