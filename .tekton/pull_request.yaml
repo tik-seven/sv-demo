@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: hello-pr-run-
+  annotations:
+    pipelinesascode.tekton.dev/on-event: "[pull_request]"
+    pipelinesascode.tekton.dev/on-target-branch: "[main]"
+spec:
+  params:
+    - name: trigger-type
+      value: pull_request
+    - name: message
+      value: "hello from PR pipeline"
+  pipelineRef:
+    name: hello-demo-pipeline
