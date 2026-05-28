@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: hello-demo-pipeline
+spec:
+  params:
+    - name: trigger-type
+      type: string
+    - name: message
+      type: string
+  tasks:
+    - name: hello
+      params:
+        - name: trigger-type
+          value: $(params.trigger-type)
+        - name: message
+          value: $(params.message)
+      taskSpec:
+        params:
+          - name: trigger-type
+            type: string
+          - name: message
+            type: string
+        steps:
+          - name: echo
+            image: registry.alauda.cn:60070/devops/tektoncd/hub/run-script:v3.21
+            script: |
+              echo "trigger: $(params.trigger-type)"
+              echo "message: $(params.message)"
