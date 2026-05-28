@@ -6,12 +6,10 @@ metadata:
     pipelinesascode.tekton.dev/on-event: "[pull_request]"
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
 spec:
-  pipelineSpec:
-    tasks:
-      - name: hello-pr
-        taskSpec:
-          steps:
-            - name: echo
-              image: registry.alauda.cn:60070/devops/tektoncd/hub/run-script:v3.21
-              script: |
-                echo "hello from PR pipeline."
+  params:
+    - name: trigger-type
+      value: pull_request
+    - name: message
+      value: "hello from PR pipeline"
+  pipelineRef:
+    name: hello-demo-pipeline

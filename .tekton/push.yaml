@@ -6,12 +6,10 @@ metadata:
     pipelinesascode.tekton.dev/on-event: "[push]"
     pipelinesascode.tekton.dev/on-target-branch: "[master, main]"
 spec:
-  pipelineSpec:
-    tasks:
-      - name: hello
-        taskSpec:
-          steps:
-            - name: echo
-              image: registry.alauda.cn:60070/devops/tektoncd/hub/run-script:v3.21
-              script: |
-                echo "hello from pipelines as code."
+  params:
+    - name: trigger-type
+      value: push
+    - name: message
+      value: "hello from pipelines as code"
+  pipelineRef:
+    name: hello-demo-pipeline
