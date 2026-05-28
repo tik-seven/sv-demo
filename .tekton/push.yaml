@@ -1,17 +1,31 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: hello-pac-run-
+  generateName: sv-direct-name-main-
   annotations:
     pipelinesascode.tekton.dev/on-event: "[push]"
-    pipelinesascode.tekton.dev/on-target-branch: "[master, main]"
+    pipelinesascode.tekton.dev/on-target-branch: "[main]"
 spec:
-  pipelineSpec:
-    tasks:
-      - name: hello
-        taskSpec:
-          steps:
-            - name: echo
-              image: registry.alauda.cn:60070/devops/tektoncd/hub/run-script:v3.21
-              script: |
-                echo "hello from pipelines as code."
+  pipelineRef:
+    name: pac-ref-type-pipeline
+  params:
+    - name: trigger-type
+      value: "github-push-direct-name"
+    - name: message
+      value: "GitHub App push triggered direct pipelineRef name run"
+    - name: source-repo
+      value: "{{ repo_url }}"
+    - name: source-branch
+      value: "{{ source_branch }}"
+    - name: target-branch
+      value: "{{ target_branch }}"
+    - name: revision
+      value: "{{ revision }}"
+    - name: pr-number
+      value: ""
+  taskRunTemplate:
+    serviceAccountName: default
+    podTemplate:
+      securityContext:
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
