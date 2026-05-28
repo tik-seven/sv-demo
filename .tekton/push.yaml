@@ -1,19 +1,25 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: sv-repo-defined-main-
+  generateName: sv-cluster-resolver-main-
   annotations:
     pipelinesascode.tekton.dev/on-event: "[push]"
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
-    pipelinesascode.tekton.dev/pipeline: ".tekton/pipeline.yaml"
 spec:
   pipelineRef:
-    name: sv-repo-defined-pipeline
+    resolver: cluster
+    params:
+      - name: kind
+        value: pipeline
+      - name: name
+        value: pac-ref-type-pipeline
+      - name: namespace
+        value: demo-1
   params:
     - name: trigger-type
-      value: "github-push-repo-defined-pipeline"
+      value: "github-push-cluster-resolver-pipeline"
     - name: message
-      value: "GitHub App push triggered repo-defined pipelineRef run"
+      value: "GitHub App push triggered cluster resolver pipelineRef run"
     - name: source-repo
       value: "{{ repo_url }}"
     - name: source-branch
