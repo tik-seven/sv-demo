@@ -1,18 +1,19 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: sv-direct-name-main-
+  generateName: sv-repo-defined-main-
   annotations:
     pipelinesascode.tekton.dev/on-event: "[push]"
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
+    pipelinesascode.tekton.dev/pipeline: ".tekton/pipeline.yaml"
 spec:
   pipelineRef:
-    name: pac-ref-type-pipeline
+    name: sv-repo-defined-pipeline
   params:
     - name: trigger-type
-      value: "github-push-direct-name"
+      value: "github-push-repo-defined-pipeline"
     - name: message
-      value: "GitHub App push triggered direct pipelineRef name run"
+      value: "GitHub App push triggered repo-defined pipelineRef run"
     - name: source-repo
       value: "{{ repo_url }}"
     - name: source-branch
