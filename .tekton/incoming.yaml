@@ -1,18 +1,18 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: sv-event-push-
+  generateName: sv-event-incoming-
   annotations:
-    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/on-event: "[incoming]"
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
 spec:
   pipelineRef:
     name: pac-ref-type-pipeline
   params:
     - name: trigger-type
-      value: "push"
+      value: "incoming"
     - name: message
-      value: "sv-demo push event"
+      value: "sv-demo incoming event"
     - name: source-repo
       value: "{{ repo_url }}"
     - name: source-branch

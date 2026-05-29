@@ -1,18 +1,17 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: sv-event-push-
+  generateName: sv-event-comment-
   annotations:
-    pipelinesascode.tekton.dev/on-event: "[push]"
-    pipelinesascode.tekton.dev/on-target-branch: "[main]"
+    pipelinesascode.tekton.dev/on-comment: "^/pac-comment-sv-demo$"
 spec:
   pipelineRef:
     name: pac-ref-type-pipeline
   params:
     - name: trigger-type
-      value: "push"
+      value: "comment"
     - name: message
-      value: "sv-demo push event"
+      value: "{{ trigger_comment }}"
     - name: source-repo
       value: "{{ repo_url }}"
     - name: source-branch
@@ -22,7 +21,7 @@ spec:
     - name: revision
       value: "{{ revision }}"
     - name: pr-number
-      value: ""
+      value: "{{ pull_request_number }}"
   taskRunTemplate:
     serviceAccountName: default
     podTemplate:
