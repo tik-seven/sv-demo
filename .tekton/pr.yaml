@@ -25,49 +25,26 @@ spec:
     tasks:
       - name: show-ref-params
         params:
-          - name: trigger-type
-            value: "$(params.trigger-type)"
-          - name: message
-            value: "$(params.message)"
-          - name: source-repo
-            value: "$(params.source-repo)"
-          - name: source-branch
-            value: "$(params.source-branch)"
-          - name: target-branch
-            value: "$(params.target-branch)"
-          - name: revision
-            value: "$(params.revision)"
-          - name: pr-number
-            value: "$(params.pr-number)"
-        taskSpec:
+          - name: script
+            value: |
+              echo "hub task trigger-type=$(params.trigger-type)"
+              echo "message=$(params.message)"
+              echo "source-repo=$(params.source-repo)"
+              echo "source-branch=$(params.source-branch)"
+              echo "target-branch=$(params.target-branch)"
+              echo "revision=$(params.revision)"
+              echo "pr-number=$(params.pr-number)"
+        taskRef:
+          resolver: hub
           params:
-            - name: trigger-type
-              type: string
-            - name: message
-              type: string
-            - name: source-repo
-              type: string
-            - name: source-branch
-              type: string
-            - name: target-branch
-              type: string
-            - name: revision
-              type: string
-            - name: pr-number
-              type: string
-          steps:
-            - name: echo
-              image: registry.alauda.cn:60070/devops/tektoncd/hub/run-script:v3.21
-              script: |
-                #!/usr/bin/env sh
-                set -eu
-                echo "ref pipeline trigger-type=$(params.trigger-type)"
-                echo "message=$(params.message)"
-                echo "source-repo=$(params.source-repo)"
-                echo "source-branch=$(params.source-branch)"
-                echo "target-branch=$(params.target-branch)"
-                echo "revision=$(params.revision)"
-                echo "pr-number=$(params.pr-number)"
+            - name: kind
+              value: task
+            - name: catalog
+              value: catalog
+            - name: name
+              value: run-script
+            - name: version
+              value: "0.1"
         timeout: 30m0s
       - name: run-script
         params:
